@@ -30,5 +30,14 @@ portmap_service:
   - watch:
     - file: nfs_exports_file
 
+# make dirs 
+{% for name_dir, dir in server.share.iteritems() %}
+create_directory_{{ name_dir }}:
+  file.directory:
+    - name: {{ dir.path }}
+    - makedirs: True
+    - require_in:
+      - service: nfs_service
+{% endfor %}    
 
 {%- endif %}
